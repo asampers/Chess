@@ -6,7 +6,7 @@ require_relative './lib/king.rb'
 require_relative './lib/knight.rb'
 require_relative './lib/queen.rb'
 require_relative './lib/rook.rb'
-
+require_relative './lib/pieces.rb'
 
 game = Game.new
 p game.players[0].pieces.size

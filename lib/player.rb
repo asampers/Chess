@@ -4,10 +4,9 @@ class Player
 
   attr_accessor :game, :pieces
 
-  def initialize(game, starting_location)
+  def initialize(game, pieces)
     @game = game
-    @starting_location = starting_location
-    @pieces = Pawn.new(starting_location, 0), Pawn.new(starting_location, 1), Pawn.new(starting_location, 2), Pawn.new(starting_location, 3)
+    @pieces = pieces
     place_initial_pieces()
   end
 

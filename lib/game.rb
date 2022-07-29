@@ -1,5 +1,6 @@
 
 require_relative '../lib/player.rb'
+require_relative '../lib/pieces.rb'
 
 module Display
 
@@ -23,12 +24,13 @@ end
 
 class Game
   include Display
+  include Pieces 
 
   attr_accessor :board, :players
 
   def initialize
     @board = Array.new(8) { Array.new(8) }
-    @players = [Player.new(self, 1), Player.new(self, 8)]
+    @players = [Player.new(self, create_pieces(1)), Player.new(self, create_pieces(2))]
   end
 
 end
