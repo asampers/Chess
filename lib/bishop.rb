@@ -1,17 +1,23 @@
 class Bishop
-  attr_accessor :current
-  attr_reader :symbol
+  attr_accessor :current, :symbol
+  attr_reader :starting, :team
 
-  def initialize(starting_location, num)
-    @current = get_start(starting_location, num)
-    @symbol = starting_location.odd? ? "\u{2657}" : "\u{265D}"
+  def initialize(team, num)
+    @starting = get_start(team, num)
+    @current = @starting
+    @symbol = team == 'white' ? "\u{2657}" : "\u{265D}"
+    @team = team
   end  
 
-  def get_start(starting_location, num)
+  def get_start(team, num)
     if num == 0 
-      starting_location.odd? ? [7, 2] : [0, 2]
+      team == 'white' ? [7, 2] : [0, 2]
     else 
-      starting_location.odd? ? [7, 5] : [0, 5]  
+      team == 'white' ? [7, 5] : [0, 5]  
     end
+  end
+
+  def to_s
+    "Bishop"
   end
 end

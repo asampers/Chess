@@ -1,11 +1,17 @@
 class King
-  attr_accessor :current
-  attr_reader :symbol
+  attr_accessor :current, :symbol
+  attr_reader :starting, :team
 
-  def initialize(starting_location)
-    @current = starting_location.odd? ? [7, 4] : [0, 4]
-    @symbol = starting_location.odd? ? "\u{2654}" : "\u{265A}"
+  def initialize(team)
+    @starting = team == 'white' ? [7, 4] : [0, 4]
+    @current = @starting
+    @symbol = team == 'white' ? "\u{2654}" : "\u{265A}"
+    @team = team
   end  
+  
+  
 
- 
+  def to_s
+    "King"
+  end
 end

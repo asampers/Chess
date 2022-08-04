@@ -1,26 +1,26 @@
 class Player
-  require_relative '../lib/game.rb'
-  require_relative '../lib/moves.rb' 
 
-  attr_accessor :game, :pieces
+  attr_reader :name, :team
 
-  def initialize(game, pieces)
-    @game = game
-    @pieces = pieces
-    #place_initial_pieces()
+  def initialize(team, name=get_name())
+    @name = name
+    @team = team
   end
 
-
-  def place_initial_pieces()
-    @pieces.each do |piece|
-      x = piece.starting[0]
-      y = piece.starting[1]
-      @game.board[x][y] = piece.symbol
-    end  
+  def get_name
+    print "Please enter the name for this player: "
+    name = gets.chomp
+    puts "Thank you, #{name}."
+    return name 
   end
+
+  def to_s
+    "#{@name}"
+  end 
+
 
   def pick_square
-    puts "Which piece would you like to move?"
+    puts "Which piece would you like to move?" #remove this to other method
     loop do
       print "Enter letter and number of square: "
       selection = gets.chomp.downcase

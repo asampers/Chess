@@ -2,6 +2,7 @@
 require_relative '../lib/player.rb'
 require_relative '../lib/pieces.rb'
 
+
 module Display
 
   def print_board
@@ -26,11 +27,23 @@ class Game
   include Display
   include Pieces 
 
-  attr_accessor :board, :players
+  attr_accessor :board, :players, :pieces
 
   def initialize
     @board = Array.new(8) { Array.new(8) }
-    @players = [Player.new(self, create_pieces(1)), Player.new(self, create_pieces(2))]
+    @players = [Player.new('white'), Player.new('black')]
+    @pieces = create_pieces('white'), create_pieces('black')
+    place_pieces() 
   end
 
+
+  def place_pieces()
+    @pieces.each do |teams|
+      teams.each do |piece|
+      x = piece.starting[0]
+      y = piece.starting[1]
+      @board[x][y] = piece.symbol
+      end
+    end  
+  end
 end
