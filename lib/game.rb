@@ -25,7 +25,7 @@ end
 class Game
   include Display
   include Pieces 
-  include Moves
+  #include Moves
 
   attr_accessor :board, :current_player_id
   attr_reader :players, :pieces
@@ -35,14 +35,25 @@ class Game
     @current_player_id = 0
     @players = [Player.new('white'), Player.new('black')]
     @pieces = create_pieces('white') + create_pieces('black')
-    @board.place_initial_pieces(@pieces) 
+    @board.place_pieces(@pieces) 
   end
+
+  def play
+    player_turn()
+    switch_players!()
+    player_turn()
+  end
+
 
   def player_turn
     start = move_from()
-    finish = move_to()
-    piece_on_square(start)
-    piece_on_square(finish)
+    selected_piece = piece_on_square(start).pop
+    finish = move_to(selected_piece)
+    final_square = piece_on_square(finish)
+    selected_piece.move(finish) if selected_piece.possible_coordinates.include?(finish)
+    @board.clear_space(start)
+    @board.place_pieces(@pieces)
+    @board.display
   end
 
   def move_from
@@ -51,14 +62,14 @@ class Game
     adjust_player_selection(start)
   end
 
-  def move_to
-    puts "Where would you like to move it to?"
+  def move_to(selected_piece)
+    puts "Where would you like to move your #{selected_piece}?"
     finish = current_player.pick_square
     adjust_player_selection(finish)
   end
 
   def piece_on_square(coordinates)
-    p @pieces.select { |piece| piece.current == coordinates }
+    @pieces.select { |piece| piece.current == coordinates }
   end
 
   def current_player
