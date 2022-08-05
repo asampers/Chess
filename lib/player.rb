@@ -20,11 +20,10 @@ class Player
 
 
   def pick_square
-    puts "Which piece would you like to move?" #remove this to other method
     loop do
       print "Enter letter and number of square: "
       selection = gets.chomp.downcase
-      return selection if selection.match(/[a-h][1-8]/)
+      return selection.split('').reverse if selection.match(/[a-h][1-8]/)
       puts "Please enter letters 'a-h' and numbers '1-8' without space inbetween."
     end  
   end
