@@ -9,19 +9,26 @@ class Board
     [0,1,2,3,4,5,6,7].repeated_permutation(2).to_a
   end
 
-  def place_initial_pieces(pieces)
+  def place_pieces(pieces)
     @spaces.map! do |space|
       pieces.each do |piece|
         if piece.current == space
-         space = piece.symbol
+         space.push(piece.symbol)
         end 
       end
       space
     end  
-    
   end
 
-  def print_board
+  def clear_space(start)
+    @spaces.each do |space|
+      if space.include?(start[0] && start[1])
+        space.delete_at(2)
+      end 
+    end    
+  end
+
+  def display
     print "\e[32m   a  b  c  d  e  f  g  h\n\e[0m"
     rows = create_rows()
     rows.each_with_index do |line, index|
@@ -45,7 +52,7 @@ class Board
     if spot.length == 2
       (row_index + column_index).even? ? "\e[46m   \e[0m" : "\e[44m   \e[0m" 
     else
-      (row_index + column_index).even? ? "\e[46m #{spot} \e[0m" : "\e[44m #{spot} \e[0m"  
+      (row_index + column_index).even? ? "\e[46m #{spot[2]} \e[0m" : "\e[44m #{spot[2]} \e[0m"  
     end  
   end
 end
