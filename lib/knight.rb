@@ -23,7 +23,7 @@ class Knight
     team == 'white' ? "\u{2658}" : "\u{265E}"
   end
 
-  def possible_moves
+  def move_options
     [[1, 2], [2, 1], [-1, -2], [-2, -1], [1, -2], [2, -1], [-1, 2], [-2, 1]]
   end
 

@@ -1,6 +1,8 @@
 class Bishop
-  attr_accessor :current, :symbol
-  attr_reader :starting, :team
+  include Move 
+
+  attr_accessor :current
+  attr_reader :starting, :team, :symbol
 
   def initialize(team, num)
     @starting = get_start(team, num)
@@ -15,6 +17,10 @@ class Bishop
     else 
       team == 'white' ? [7, 5] : [0, 5]  
     end
+  end
+
+  def move_options
+    [[-1,-1], [-1,1], [1,-1], [1, 1]]
   end
 
   def to_s

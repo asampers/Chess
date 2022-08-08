@@ -1,6 +1,8 @@
 class King
-  attr_accessor :current, :symbol
-  attr_reader :starting, :team
+  include Move
+
+  attr_accessor :current
+  attr_reader :starting, :team, :symbol
 
   def initialize(team)
     @starting = team == 'white' ? [7, 4] : [0, 4]
@@ -9,7 +11,10 @@ class King
     @team = team
   end  
   
-  
+  def move_options
+    [[-1,0], [1,0], [0,-1], [0, 1], 
+    [-1,-1],[-1,1], [1,-1], [1, 1]]
+  end
 
   def to_s
     "King"
