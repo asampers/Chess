@@ -1,4 +1,5 @@
 class Board 
+
   attr_accessor :spaces
 
   def initialize
@@ -28,13 +29,22 @@ class Board
     end    
   end
 
+  def square_free?(space)
+    return true if @spaces.include?(space)
+
+    false
+  end
+
+  def legal_move?(move)
+    return true if @spaces.include?(move)
+
+    false
+  end
+
   def display
     print "\e[32m   a  b  c  d  e  f  g  h\n\e[0m"
     rows = create_rows()
-    rows.each_with_index do |line, index|
-      changed = line.map.each_with_index {|spot, ind| select_background(index, ind, spot) }.join
-      puts "\e[34m#{8 - index}\e[0m #{changed} \e[34m#{8 - index}\e[0m"
-    end
+    puts_adjusted_rows(rows)
     puts "\e[32m   a  b  c  d  e  f  g  h\n\e[0m"
   end
 
@@ -46,6 +56,13 @@ class Board
       i += 8
     end
     rows 
+  end
+
+  def puts_adjusted_rows(rows)
+    rows.each_with_index do |line, index|
+      changed = line.map.each_with_index {|spot, ind| select_background(index, ind, spot) }.join
+      puts "\e[34m#{8 - index}\e[0m #{changed} \e[34m#{8 - index}\e[0m"
+    end
   end
 
   def select_background(row_index, column_index, spot)
