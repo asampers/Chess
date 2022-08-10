@@ -4,11 +4,9 @@ module Move
     @current = destination
   end
 
-  def keep_legal_first_visit(board, moves, turns)
+  def keep_legal_first_visit(board, moves)
     moves.keep_if {|move| board.legal_move?(move)}
     moves
-    moves.keep_if {|move| first_visit?(move, turns)}
-    return moves
   end
 
   def first_visit?(move, turns)
@@ -20,37 +18,26 @@ module Move
     true  
   end
 
-  def possible_moves(start, finish, turns, visited)
-    return if turns.include?(finish)
+  def possible_moves(start=@current)
     moves = move_options.map do |move|
      [start[0] + move[0], start[1] + move[1]]
     end 
-    keep_legal_first_visit(board=Board.new, moves, turns) 
-    visited[start] = moves unless moves.empty?
-    turns << moves unless moves.empty?
+    keep_legal_first_visit(board=Board.new, moves) 
   end
 
-  def make_all_possible_moves(start, finish, selected_piece, turns, visited=Hash.new)
-    turns.each_with_index do |turn, index|
-      if turn.include?(finish)
-        return visited
-      end 
-      turn.each do |move|
-        selected_piece.possible_moves(move, finish, turns, visited) 
-      end 
-    end    
+  def clear_path?(path, board=@board)
+    return true if path.length == 1
+    return true if path.all? {|space| board.square_free?(space)}
+    
+    false
   end
 
-  def find_path(visited, moves, current, start)
-    until moves.include?(start)
-      visited.each_pair do |key, value|
-        if value.include?(current)
-          current = key
-          moves.unshift(key)
-          return moves if current == start
-        end 
-      end 
-    end      
+  def find_path(moves, finish)
+    path = []
+    moves.each do |move| 
+      path << move
+      return path if move == finish    
+    end
   end
 
 end

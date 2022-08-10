@@ -2,6 +2,7 @@
 require_relative '../lib/player.rb'
 require_relative '../lib/pieces.rb'
 require_relative '../lib/move.rb'
+require_relative '../lib/move_long.rb'
 require_relative '../lib/board.rb'
 
 module Display
@@ -26,6 +27,7 @@ class Game
   include Display
   include Pieces 
   include Move
+  include MoveLong
 
   attr_accessor :board, :current_player_id
   attr_reader :players, :pieces
@@ -49,15 +51,17 @@ class Game
     start = move_from()
     selected_piece = piece_on_square(start).pop
     finish = move_to(selected_piece)
-    final_square = piece_on_square(finish)
+    final_square = piece_on_square(finish).pop
 
-    visited = make_all_possible_moves(start, finish, selected_piece, turns=[[start]] )
+    p moves = selected_piece.possible_moves
+    p path = find_path(moves, finish)
+
+    selected_piece.move(finish) if moves.include?(finish) #&& clear_path?(path)
     
-    path = find_path(visited, moves=[finish], current=finish.clone, start)
-    p path
-    selected_piece.move(finish) if path.include?(start) && path.include?(finish)
+    @pieces.delete(final_square) 
     
     @board.clear_space(start)
+    @board.clear_space(finish) 
     @board.place_pieces(@pieces)
     @board.display
   end
