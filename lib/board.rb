@@ -30,8 +30,8 @@ class Board
   end
 
   def square_free?(space)
-    return true if @spaces.include?(space)
-
+    return true if @spaces.index(space) != nil
+    
     false
   end
 
