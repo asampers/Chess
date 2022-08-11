@@ -21,21 +21,25 @@ class Rook
   end
 
   def possible_moves()
-    moves = vertical_moves(), horizontal_moves()
+    moves = vertical_moves(), vertical_moves2(),
+            horizontal_moves(), horizontal_moves2()
   end
 
-  def find_path(moves, finish)
-    #go through each moves array and find the path to finish, make sure it's clear
-  end
 
   def horizontal_move_options
-    [[0,-1], [0, 1], [0,-2], [0, 2], [0,-3], [0,3], 
-      [0,-4], [0,4], [0,-5], [0,5], [0,-6], [0,6], [0,-7], [0,7]]
+    [[0,-1], [0,-2], [0,-3], [0,-4], [0,-5], [0,-6], [0,-7]]
+  end
+
+  def horizontal_move_options2
+    [[0, 1], [0, 2], [0,3], [0,4], [0,5], [0,6], [0,7]]
   end
 
   def vertical_move_options
-    [[-1,0], [1,0], [-2, 0], [2,0], [-3,0], [3,0], 
-     [-4,0], [4,0], [-5,0], [5,0],[-6,0], [6,0], [-7,0], [7,0]]
+    [[-1,0], [-2, 0], [-3,0], [-4,0], [-5,0], [-6,0], [-7,0]]
+  end
+
+  def vertical_move_options2
+    [[1,0], [2,0], [3,0], [4,0], [5,0], [6,0], [7,0]]
   end
 
   def to_s
