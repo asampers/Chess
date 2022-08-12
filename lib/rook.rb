@@ -20,27 +20,21 @@ class Rook
     end
   end
 
-  def possible_moves()
-    moves = vertical_moves(), vertical_moves2(),
-            horizontal_moves(), horizontal_moves2()
+  def possible_moves(start=@current)
+    moves = get_move_options.map do |option| 
+              option.map do |move|
+                [start[0] + move[0], start[1] + move[1]]
+              end 
+            end
+    moves.map {|move| keep_legal_moves(move)}            
   end
 
-
-  def horizontal_move_options
-    [[0,-1], [0,-2], [0,-3], [0,-4], [0,-5], [0,-6], [0,-7]]
-  end
-
-  def horizontal_move_options2
-    [[0, 1], [0, 2], [0,3], [0,4], [0,5], [0,6], [0,7]]
-  end
-
-  def vertical_move_options
-    [[-1,0], [-2, 0], [-3,0], [-4,0], [-5,0], [-6,0], [-7,0]]
-  end
-
-  def vertical_move_options2
-    [[1,0], [2,0], [3,0], [4,0], [5,0], [6,0], [7,0]]
-  end
+  def get_move_options
+    [[[0,-1], [0,-2], [0,-3], [0,-4], [0,-5], [0,-6], [0,-7]],
+    [[0, 1], [0, 2], [0,3], [0,4], [0,5], [0,6], [0,7]],
+    [[-1,0], [-2, 0], [-3,0], [-4,0], [-5,0], [-6,0], [-7,0]],
+    [[1,0], [2,0], [3,0], [4,0], [5,0], [6,0], [7,0]]]
+  end 
 
   def to_s
     "Rook"

@@ -19,27 +19,22 @@ class Bishop
     end
   end
 
-  def possible_moves()
-    moves = diagonal_down_moves(), diagonal_down_moves2(), 
-            diagonal_up_moves(), diagonal_up_moves2()
+  def possible_moves(start=@current)
+    moves = get_move_options.map do |option| 
+            option.map do |move|
+              [start[0] + move[0], start[1] + move[1]]
+            end 
+          end
+    moves.map {|move| keep_legal_moves(move)}   
   end
 
-  def diagonal_down_move_options
-    [[-1,-1], [-2,-2], [-3,-3], [-4,-4], [-5,-5], [-6,-6], [-7,-7]]
+  def get_move_options
+    [[-1,-1], [-2,-2], [-3,-3], [-4,-4], [-5,-5], [-6,-6], [-7,-7],
+    [[-1,1], [-2,2], [-3,3], [-4,4], [-5,5], [-6,6], [-7,7]],
+    [[1,1], [2,2], [3,3], [4,4], [5,5], [6,6], [7,7]],
+    [[1,-1], [2,-2],  [3,-3], [4,-4], [5,-5], [6,-6], [7,-7]]]
   end
 
-  def diagonal_down_move_options2
-    [[-1,1], [-2,2], [-3,3], [-4,4], [-5,5], [-6,6], [-7,7]]
-  end
-
-  def diagonal_up_move_options
-    [[1,1], [2,2], [3,3], [4,4], [5,5], [6,6], [7,7]]
-  end
-
-  def diagonal_up_move_options2
-    [[1,-1], [2,-2],  [3,-3], [4,-4], [5,-5], [6,-6], [7,-7]]
-  end
-  
   def to_s
     "Bishop"
   end
