@@ -29,10 +29,14 @@ class Board
     end    
   end
 
+  def square_occupied?(space)
+    return spaces.index(space)
+  end 
+
   def square_free?(space)
-    return true if @spaces.index(space) != nil
+    return false if @spaces.index(space).nil?
     
-    false
+    true
   end
 
   def legal_move?(move)
