@@ -16,7 +16,7 @@ class Pawn
   end 
 
   def move_options
-    p get_move_options()
+    get_move_options()
   end
   
   def get_move_options
@@ -35,14 +35,11 @@ class Pawn
     diagonal = moves.map do |move|
       [move[0] + 0, move[1] - 1]  
     end  
-    p "This is diagonal #{diagonal}"
     diagonal2 = moves.map do |move|
       [move[0] + 0, move[1] + 1]
     end  
     moves = moves + diagonal + diagonal2
-    p "Now this is moves #{moves}"
-    p "This is keep legal moves"
-    p keep_legal_moves(moves)
+    keep_legal_moves(moves)
   end 
 
   def can_move?(path, moves, finish, board)
