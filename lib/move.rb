@@ -24,8 +24,7 @@ module Move
   end 
 
   def can_move?(path, moves, finish, board)
-    return true if moves.include?(finish) 
-    return true if path.all? {|space| board.square_free?(space)}
+    return true if moves.include?(finish)  
     
     false
   end
