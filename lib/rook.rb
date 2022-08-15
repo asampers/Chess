@@ -1,6 +1,6 @@
 class Rook
   include Move
-  include MoveLong
+  
 
   attr_accessor :current
   attr_reader :starting, :team, :symbol
@@ -19,6 +19,12 @@ class Rook
       team == 'white' ? [7, 7] : [0, 7]  
     end
   end
+
+  def can_move?(path, moves, finish, board)
+    return true if path.all? {|space| board.square_free?(space)}
+
+    false
+  end 
 
   def possible_moves(start=@current)
     moves = get_move_options.map do |option| 

@@ -19,6 +19,12 @@ class Bishop
     end
   end
 
+  def can_move?(path, moves, finish, board)
+    return true if path.all? {|space| board.square_free?(space)}
+
+    false
+  end 
+
   def possible_moves(start=@current)
     moves = get_move_options.map do |option| 
             option.map do |move|
@@ -29,7 +35,7 @@ class Bishop
   end
 
   def get_move_options
-    [[-1,-1], [-2,-2], [-3,-3], [-4,-4], [-5,-5], [-6,-6], [-7,-7],
+    [[[-1,-1], [-2,-2], [-3,-3], [-4,-4], [-5,-5], [-6,-6], [-7,-7]],
     [[-1,1], [-2,2], [-3,3], [-4,4], [-5,5], [-6,6], [-7,7]],
     [[1,1], [2,2], [3,3], [4,4], [5,5], [6,6], [7,7]],
     [[1,-1], [2,-2],  [3,-3], [4,-4], [5,-5], [6,-6], [7,-7]]]
