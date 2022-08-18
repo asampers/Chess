@@ -1,6 +1,7 @@
 class Knight 
   include Move
-
+  include Check
+  
   attr_accessor :current 
   attr_reader :starting, :team, :symbol
 
@@ -26,6 +27,7 @@ class Knight
   def move_options
     [[1, 2], [2, 1], [-1, -2], [-2, -1], [1, -2], [2, -1], [-1, 2], [-2, 1]]
   end
+
 
   def to_s
     "Knight"
