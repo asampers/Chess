@@ -1,7 +1,11 @@
 module Check
   
   def king_in_check?
-    can_reach_king?()
+    can_reach_king?().any?
+  end
+
+  def checkmate?
+    test_all_possible_moves().none?
   end
 
   def opponent_pieces
@@ -20,78 +24,57 @@ module Check
     your_king.current
   end
 
-  def attempt_movement(piece, board=@board, finish=king_position())
+  def attempt_movement(piece, finish, board=@board)
     moves = piece.possible_moves()
     path = find_path(moves, finish)
     piece.can_move?(path, moves, finish, board)
   end
 
   def can_reach_king?
-    attempts = opponent_pieces.map do |piece|
-      attempt_movement(piece)
+    opponent_pieces.map do |piece|
+      attempt_movement(piece, king_position()) 
     end 
-    attempts.any?
   end
 
   def not_your_piece(destination)
     yours = your_pieces.select { |piece| piece.current == destination }
     yours.none?
   end
-
-  def create_fake_board(fake_pieces)
-    fake = Board.new
-    fake.place_pieces(fake_pieces)
-  end
   
   def test_all_possible_moves
-    your_pieces.map do |fake|
-      all_possible_destinations(fake)
+    options = your_pieces.map do |fake|
+      possible_moves_out_of_check(fake)
     end 
-    
+    options.keep_if {|one| one.any?}
+    options.flatten(1)
   end
 
-  def all_possible_destinations(fake)
-    #fake_board = Board.new
+  def possible_moves_out_of_check(fake) 
     moves = fake.possible_moves
-    if fake.class == Pawn || fake.class == King || fake.class == Knight
-      moves.map do |move|
-         next if attempt_movement(fake, board=@board, finish=move) == false || not_your_piece(move) == false
-         stored = fake.current
-         stored_opponent = piece_on_square(move).pop
-        
-         fake.move(move) if attempt_movement(fake, board=@board, finish=move) && not_your_piece(move)
-         pieces.delete(stored_opponent) unless stored_opponent.nil? || stored_opponent.team == fake.team
-         board.clear_space(stored)
-         board.clear_space(move)
-         board.place_pieces(pieces)
-         
-         p "If #{fake} moves to #{fake.current}: #{king_in_check?()}" if king_in_check?() == false
-         fake.current = stored
-         board.clear_space(move)
-         pieces << stored_opponent unless stored_opponent.nil?
-         board.place_pieces(pieces)
-      end  
-    else 
+    options = []
+    if fake.class == King || fake.class == Knight
+      moves = Array[moves]
+    end
       moves.map do |turn|
-        turn.map do |destination|
-         next if attempt_movement(fake, board=@board, finish=destination) == false || not_your_piece(destination) == false
+        turn.keep_if do |destination|
+         next if attempt_movement(fake, destination, board=@board) == false || not_your_piece(destination) == false
          stored = fake.current
          stored_opponent = piece_on_square(destination).pop
-         fake.move(destination) if attempt_movement(fake, board=@board, finish=destination) && not_your_piece(destination)
+         fake.move(destination) if attempt_movement(fake, destination, board=@board) && not_your_piece(destination)
          pieces.delete(stored_opponent) unless stored_opponent.nil? || stored_opponent.team == fake.team
          board.clear_space(stored)
          board.clear_space(destination)
          board.place_pieces(pieces)
 
-         p "If #{fake} moves to #{destination}: #{king_in_check?()}" if king_in_check?() == false
+         options << destination if king_in_check?() == false 
+         
          fake.current = stored
          board.clear_space(destination)
          pieces << stored_opponent unless stored_opponent.nil?
          board.place_pieces(pieces)
         end 
-      end   
-    end 
-      
+      end     
+    options
   end 
 
 end
