@@ -1,5 +1,6 @@
 class Bishop
   include Move 
+  include Check
 
   attr_accessor :current
   attr_reader :starting, :team, :symbol
@@ -7,7 +8,7 @@ class Bishop
   def initialize(team, num)
     @starting = get_start(team, num)
     @current = @starting
-    @symbol = team == 'white' ? "\u{2657}" : "\u{265D}"
+    @symbol = get_symbol()
     @team = team
   end  
 
@@ -17,6 +18,10 @@ class Bishop
     else 
       team == 'white' ? [7, 5] : [0, 5]  
     end
+  end
+
+  def get_symbol(team)
+    team == 'white' ? "\u{2657}" : "\u{265D}"
   end
 
   def can_move?(path, moves, finish, board)
