@@ -16,13 +16,6 @@ module Move
     keep_legal_moves(moves) 
   end
 
-  def pawn_capturing?(moves, finish, board)
-    if board.square_free?(finish) == false 
-      move_diagonally(moves).include?(finish)
-    end  
-     
-  end 
-
   def can_move?(path, moves, finish, board)
     return true if moves.include?(finish)  
     
