@@ -2,8 +2,9 @@
 require_relative '../lib/player.rb'
 require_relative '../lib/pieces.rb'
 require_relative '../lib/move.rb'
-require_relative '../lib/move_long.rb'
+require_relative '../lib/check.rb'
 require_relative '../lib/board.rb'
+require_relative '../lib/save_game.rb'
 
 module Display
 
@@ -27,7 +28,8 @@ class Game
   include Display
   include Pieces 
   include Move
-  include MoveLong
+  include Check
+  include SaveGame
 
   attr_accessor :board, :current_player_id
   attr_reader :players, :pieces
@@ -41,6 +43,28 @@ class Game
   end
 
   def play
+    #loop do 
+    #  @board.display
+    player_turn()
+    switch_players!()
+    player_turn()
+    switch_players!()
+    player_turn()
+    switch_players!()
+    player_turn()
+    switch_players!()
+    player_turn()
+    switch_players!()
+    player_turn()
+    switch_players!()
+    player_turn()
+    switch_players!()
+    player_turn()
+    switch_players!()
+    player_turn()
+    switch_players!()
+    player_turn()
+    switch_players!()
     player_turn()
     switch_players!()
     player_turn()
@@ -48,38 +72,35 @@ class Game
 
 
   def player_turn
-    start = move_from()
-    selected_piece = piece_on_square(start).pop
-    finish = move_to(selected_piece)
-    final_square = piece_on_square(finish).pop
+    @board.display
+    p "Your king is in check!" if king_in_check?()
 
-    p moves = selected_piece.possible_moves
-    p path = find_path(moves, finish)
+    p test_all_possible_moves() if king_in_check?() 
+    puts "Which piece would you like to move, #{current_player}?"
+    start = adjust_player_selection(current_player.pick_square)
+      
+    return save_game(self) if start == 'save'
 
-    selected_piece.move(finish) if moves.include?(finish) #&& clear_path?(path)
+    selected_piece = piece_on_square(start)
+    puts "Where would you like to move your #{selected_piece}?"
+    finish = adjust_player_selection(current_player.pick_square)
+
+    final_square = piece_on_square(finish)
+    
+    castling(selected_piece, finish)
+
+    moves = selected_piece.possible_moves
+    path = find_path(moves, finish)
+
+    selected_piece.move(finish) if selected_piece.can_move?(path, moves, finish, @board)
     
     @pieces.delete(final_square) 
-    
-    @board.clear_space(start)
-    @board.clear_space(finish) 
-    @board.place_pieces(@pieces)
-    @board.display
-  end
 
-  def move_from
-    puts "Which piece would you like to move, #{current_player}?"
-    start = current_player.pick_square
-    adjust_player_selection(start)
-  end
-
-  def move_to(selected_piece)
-    puts "Where would you like to move your #{selected_piece}?"
-    finish = current_player.pick_square
-    adjust_player_selection(finish)
+    @board.recognize_move(start, finish, @pieces)
   end
 
   def piece_on_square(coordinates)
-    @pieces.select { |piece| piece.current == coordinates }
+    @pieces.select { |piece| piece.current == coordinates }.pop
   end
 
   def current_player

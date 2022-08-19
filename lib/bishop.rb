@@ -8,7 +8,7 @@ class Bishop
   def initialize(team, num)
     @starting = get_start(team, num)
     @current = @starting
-    @symbol = get_symbol()
+    @symbol = get_symbol(team)
     @team = team
   end  
 

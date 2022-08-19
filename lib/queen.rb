@@ -7,7 +7,7 @@ class Queen
 
   def initialize(team)
     @current = get_start(team)
-    @symbol =  get_symbol()
+    @symbol =  get_symbol(team)
     @team = team
   end  
 
