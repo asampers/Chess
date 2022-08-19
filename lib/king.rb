@@ -6,9 +6,9 @@ class King
   attr_reader :starting, :team, :symbol
 
   def initialize(team)
-    @starting = get_start()
+    @starting = get_start(team)
     @current = @starting
-    @symbol = get_symbol()
+    @symbol = get_symbol(team)
     @team = team
   end  
   
@@ -25,6 +25,9 @@ class King
     [-1,-1],[-1,1], [1,-1], [1, 1]]
   end
 
+  def castling_move_options
+    [[[0,1], [0,2]],[[0,-1],[0,-2]]]
+  end
   
 
   def to_s

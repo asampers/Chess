@@ -8,7 +8,7 @@ class Rook
   def initialize(team, num)
     @starting = get_start(team, num)
     @current = @starting
-    @symbol = get_symbol()
+    @symbol = get_symbol(team)
     @team = team
   end  
 
@@ -29,6 +29,18 @@ class Rook
 
     false
   end 
+
+  def castle_move
+    if @team == 'white' && @current == [7,0]
+      @current = [7,3]
+    elsif @team == 'white' && @current == [7,7]
+      @current = [7,5]
+    elsif @team == 'black' && @current == [0,0]
+      @current = [0,3]
+    elsif @team == 'black' && @current == [0,7]    
+      @current = [0,5]
+    end    
+  end
 
   def possible_moves(start=@current)
     moves = get_move_options.map do |option| 
