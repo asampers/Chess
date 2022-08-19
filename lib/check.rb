@@ -1,11 +1,27 @@
 module Check
   
+  def out_of_check(finish)
+    if king_in_check?()
+      return test_all_possible_moves().include?(finish)
+    end  
+    true
+  end
+  
   def king_in_check?
     can_reach_king?().any?
   end
 
-  def checkmate?
-    test_all_possible_moves().none?
+  def checkmate(opponent)
+    if test_all_possible_moves().none?
+      puts "Game Over: Checkmate"
+      puts "#{opponent} wins!"
+    end  
+  end
+
+  def stalemate
+    if king_in_check?() == false && test_all_possible_moves().none?
+      puts "Game Over: It's a stalemate."
+    end  
   end
 
   def opponent_pieces
@@ -65,7 +81,7 @@ module Check
          
          board.recognize_move(stored, destination, pieces)
 
-         options << "#{fake}: #{destination}" if king_in_check?() == false 
+         options << destination if king_in_check?() == false 
          
          fake.move(stored)
          board.clear_space(destination)
