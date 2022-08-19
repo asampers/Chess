@@ -59,16 +59,15 @@ module Check
         turn.keep_if do |destination|
          next if attempt_movement(fake, destination, board=@board) == false || not_your_piece(destination) == false
          stored = fake.current
-         stored_opponent = piece_on_square(destination).pop
+         stored_opponent = piece_on_square(destination)
          fake.move(destination) if attempt_movement(fake, destination, board=@board) && not_your_piece(destination)
          pieces.delete(stored_opponent) unless stored_opponent.nil? || stored_opponent.team == fake.team
-         board.clear_space(stored)
-         board.clear_space(destination)
-         board.place_pieces(pieces)
-
-         options << destination if king_in_check?() == false 
          
-         fake.current = stored
+         board.recognize_move(stored, destination, pieces)
+
+         options << "#{fake}: #{destination}" if king_in_check?() == false 
+         
+         fake.move(stored)
          board.clear_space(destination)
          pieces << stored_opponent unless stored_opponent.nil?
          board.place_pieces(pieces)
