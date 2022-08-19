@@ -24,13 +24,13 @@ module Move
 
   def castling(selected_piece, finish, board=@board, pieces=@pieces)
     
-    if castling_requirements_met(selected_piece, finish) && castling_path_clear?(selected_piece, finish)
+    if castling_requirements_met?(selected_piece, finish) && castling_path_clear?(selected_piece, finish)
       king_start = selected_piece.current
       rook_start = closest_rook(finish).current
       
       selected_piece.move(finish)
       closest_rook(finish).castle_move
-      
+
       board.clear_space(king_start)
       board.clear_space(rook_start)
       board.place_pieces(pieces)
@@ -38,18 +38,17 @@ module Move
     end
   end
 
-  def castling_requirements_met(selected_piece, finish)
+  def castling_requirements_met?(selected_piece, finish)
     return selected_piece.class == King && 
       selected_piece.current == selected_piece.starting &&
-      closest_rook(finish).current == closest_rook(finish).starting
+      closest_rook(finish).current == closest_rook(finish).starting &&
+      [[0,2], [0,6], [7,2], [7,6]].include?(finish)
   end 
 
   def castling_path_clear?(selected_piece, finish, board=@board)
     path = selected_piece.find_castling_path()
-    p path
     path.keep_if {|direction| direction.include?(finish)}
-    p path.flatten!(1) 
-    p path.all? {|space| board.square_free?(space)}
+    path.flatten!(1) 
     return path.all? {|space| board.square_free?(space)}
   end 
 
