@@ -5,6 +5,7 @@ require_relative '../lib/move.rb'
 require_relative '../lib/check.rb'
 require_relative '../lib/board.rb'
 require_relative '../lib/save_game.rb'
+require 'yaml'
 
 module Display
 
@@ -14,6 +15,7 @@ module Display
           'g', 'h']
 
   def adjust_player_selection(selection)
+    return selection if selection == 'save' || selection == 'draw'
     selection[0] = 8 - selection[0].to_i
     LTRS.each_with_index do |ltr, ind| 
       selection[1] = ind if ltr == selection[1] 
@@ -45,7 +47,8 @@ class Game
   def play
     #loop do 
     #  @board.display
-    player_turn()
+      
+      player_turn()
     switch_players!()
     player_turn()
     switch_players!()
@@ -76,15 +79,15 @@ class Game
     p "Your king is in check!" if king_in_check?()
 
     p test_all_possible_moves() if king_in_check?() 
+
     puts "Which piece would you like to move, #{current_player}?"
     start = adjust_player_selection(current_player.pick_square)
-      
+    selected_piece = piece_on_square(start)
+
     return save_game(self) if start == 'save'
 
-    selected_piece = piece_on_square(start)
     puts "Where would you like to move your #{selected_piece}?"
     finish = adjust_player_selection(current_player.pick_square)
-
     final_square = piece_on_square(finish)
     
     castling(selected_piece, finish)
@@ -92,7 +95,7 @@ class Game
     moves = selected_piece.possible_moves
     path = find_path(moves, finish)
 
-    selected_piece.move(finish) if selected_piece.can_move?(path, moves, finish, @board)
+    selected_piece.move(finish) if selected_piece.can_move?(path, moves, finish, @board) && out_of_check(finish)
     
     @pieces.delete(final_square) 
 
