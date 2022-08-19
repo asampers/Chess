@@ -10,6 +10,12 @@ class Board
     [0,1,2,3,4,5,6,7].repeated_permutation(2).to_a
   end
 
+  def recognize_move(start, finish, pieces)
+    clear_space(start)
+    clear_space(finish)
+    place_pieces(pieces)
+  end
+
   def place_pieces(pieces)
     @spaces.map! do |space|
       pieces.each do |piece|
@@ -30,7 +36,7 @@ class Board
   end
 
   def square_occupied?(space)
-    return spaces.index(space)
+    return @spaces.index(space)
   end 
 
   def square_free?(space)
