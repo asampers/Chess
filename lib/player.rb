@@ -23,8 +23,11 @@ class Player
     loop do
       print "Enter letter and number of square: "
       selection = gets.chomp.downcase
+      return selection if selection == 'save' || selection == 'draw'
       return selection.split('').reverse if selection.match(/[a-h][1-8]/)
+
       puts "Please enter letters 'a-h' and numbers '1-8' without space inbetween."
+      puts "You may also enter 'save' or 'draw' to end the game."  
     end  
   end
 end
