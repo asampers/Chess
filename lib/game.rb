@@ -45,61 +45,65 @@ class Game
   end
 
   def play
-    #loop do 
-    #  @board.display
-      
-      player_turn()
-    switch_players!()
-    player_turn()
-    switch_players!()
-    player_turn()
-    switch_players!()
-    player_turn()
-    switch_players!()
-    player_turn()
-    switch_players!()
-    player_turn()
-    switch_players!()
-    player_turn()
-    switch_players!()
-    player_turn()
-    switch_players!()
-    player_turn()
-    switch_players!()
-    player_turn()
-    switch_players!()
-    player_turn()
-    switch_players!()
-    player_turn()
+    loop do 
+      @board.display
+    
+      break if player_turn() == 'stop' 
+
+      switch_players!()
+    end
   end
 
 
   def player_turn
-    @board.display
-    p "Your king is in check!" if king_in_check?()
+    return 'stop' if checkmate_stalemate(opponent) == 'stop'
+    p "Your king is in check!" if king_in_check?() 
+    loop do
 
-    p test_all_possible_moves() if king_in_check?() 
+      start = move_from() 
+      
+      return save_game(self) if start == 'save'
+      return drawn_game() if start == 'draw'
 
+      selected_piece = piece_on_square(start)
+
+      finish = move_to(selected_piece)
+      final_square = piece_on_square(finish)
+      
+      break if castling(selected_piece, finish)
+
+      p moves = selected_piece.possible_moves
+      p path = find_path(moves, finish)
+
+      if selected_piece.can_move?(path, moves, finish, @board) && out_of_check(finish) && not_your_piece(finish)
+        selected_piece.move(finish) 
+        @pieces.delete(final_square) 
+        @board.recognize_move(start, finish, @pieces)
+        break
+      end 
+      puts "-- That's not a legal move, please select again. --" 
+    end  
+  end
+
+  def move_from()
     puts "Which piece would you like to move, #{current_player}?"
-    start = adjust_player_selection(current_player.pick_square)
-    selected_piece = piece_on_square(start)
+    loop do 
+      start = adjust_player_selection(current_player.pick_square)
+      piece = piece_on_square(start)
 
-    return save_game(self) if start == 'save'
+      return start if start == 'save' || start == 'draw'
+      return start if not_your_piece(start) == false
+      puts "You can't move that piece. Please try again."
+    end  
+  end
 
+  def move_to(selected_piece)
     puts "Where would you like to move your #{selected_piece}?"
-    finish = adjust_player_selection(current_player.pick_square)
-    final_square = piece_on_square(finish)
-    
-    castling(selected_piece, finish)
+    loop do
+      finish = adjust_player_selection(current_player.pick_square)
 
-    moves = selected_piece.possible_moves
-    path = find_path(moves, finish)
-
-    selected_piece.move(finish) if selected_piece.can_move?(path, moves, finish, @board) && out_of_check(finish)
-    
-    @pieces.delete(final_square) 
-
-    @board.recognize_move(start, finish, @pieces)
+      return finish 
+    end  
   end
 
   def piece_on_square(coordinates)
