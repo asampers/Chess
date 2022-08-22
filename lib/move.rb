@@ -17,6 +17,7 @@ module Move
 
   def closest_rook(finish)
     routes = find_rook_path(finish)
+    return false if routes.nil?
     
     if routes[0].length < routes[1].length
       return your_rooks.first
@@ -34,6 +35,7 @@ module Move
       closest_rook(finish).castle_move
 
       board.recognize_move(king_start, rook_start, pieces)
+      true
     end
   end
 
@@ -72,7 +74,7 @@ module Move
   end
 
   def can_move?(path, moves, finish, board)
-    return true if moves.include?(finish) 
+    return true if moves.include?(finish)
     
     false
   end
