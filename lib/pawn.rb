@@ -44,8 +44,14 @@ class Pawn
   def can_move?(path, moves, finish, board)
     if board.square_free?(finish)
       moves.delete_at(1)
+    elsif board.square_free?(finish) == false && moves[0].include?(finish)
+      return false  
+    elsif board.square_free?(finish) == false
+      return moves.flatten(1).include?(finish)  
     end
     
+    p moves.flatten(1)
+    p path
     return moves.flatten(1).include?(finish) && path.all? {|space| board.square_free?(space)}
   end 
 
