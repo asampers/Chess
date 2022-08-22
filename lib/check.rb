@@ -11,17 +11,23 @@ module Check
     can_reach_king?().any?
   end
 
-  def checkmate(opponent)
-    if test_all_possible_moves().none?
+  def checkmate_stalemate(opponent)
+    return if test_all_possible_moves().any?
+
+    if king_in_check?()
       puts "Game Over: Checkmate"
       puts "#{opponent} wins!"
+      return 'stop'
+    elsif king_in_check?() == false
+      puts "Game Over: It's a stalemate."
+      return 'stop'
     end  
   end
 
-  def stalemate
-    if king_in_check?() == false && test_all_possible_moves().none?
-      puts "Game Over: It's a stalemate."
-    end  
+
+  def drawn_game()
+    puts "-- Players have agreed to a draw. Game over. --"
+    return 'stop'
   end
 
   def opponent_pieces
