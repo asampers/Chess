@@ -49,6 +49,7 @@ class Game
       @board.display
     
       break if player_turn() == 'stop' 
+      pawn_promotion()
 
       switch_players!()
     end
@@ -56,10 +57,10 @@ class Game
 
 
   def player_turn
-    return 'stop' if checkmate_stalemate(opponent) == 'stop'
+    options = test_all_possible_moves()
+    return 'stop' if checkmate_stalemate(opponent, options) == 'stop'
     p "Your king is in check!" if king_in_check?() 
     loop do
-
       start = move_from() 
       
       return save_game(self) if start == 'save'
@@ -72,10 +73,10 @@ class Game
       
       break if castling(selected_piece, finish)
 
-      p moves = selected_piece.possible_moves
-      p path = find_path(moves, finish)
+      moves = selected_piece.possible_moves
+      path = find_path(moves, finish)
 
-      if selected_piece.can_move?(path, moves, finish, @board) && out_of_check(finish) && not_your_piece(finish)
+      if selected_piece.can_move?(path, moves, finish, @board) && out_of_check(selected_piece, finish) && not_your_piece(finish)
         selected_piece.move(finish) 
         @pieces.delete(final_square) 
         @board.recognize_move(start, finish, @pieces)
@@ -108,6 +109,20 @@ class Game
 
   def piece_on_square(coordinates)
     @pieces.select { |piece| piece.current == coordinates }.pop
+  end
+
+  def pawn_promotion()
+    pawns = @pieces.select {|pawn| pawn.class == Pawn}
+    piece_to_promote = pawns.select {|pawn| [0,7].include?(pawn.current[0])}.pop
+    if piece_to_promote
+      selection = current_player.pick_piece
+      new_piece = make_new_piece(current_player, selection)
+      new_piece.current = piece_to_promote.current
+      @pieces.delete(piece_to_promote)
+      @pieces << new_piece
+      @board.place_pieces(@pieces)
+      puts "#{current_player} got a new #{selection}." 
+    end  
   end
 
   def current_player

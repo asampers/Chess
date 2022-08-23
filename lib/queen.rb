@@ -5,7 +5,7 @@ class Queen
   attr_accessor :current
   attr_reader :starting, :team, :symbol
 
-  def initialize(team)
+  def initialize(team, num=0)
     @current = get_start(team)
     @symbol =  get_symbol(team)
     @team = team

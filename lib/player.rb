@@ -30,4 +30,14 @@ class Player
       puts "You may also enter 'save' or 'draw' to end the game."  
     end  
   end
+
+  def pick_piece
+    puts "What piece would you like your pawn to become?"
+      loop do 
+        answer = gets.chomp.capitalize
+        return answer if ['Rook', 'Bishop', 'Knight', 'Queen'].include?(answer)
+        print "Please type one of the following: "
+        puts "Rook, Bishop, Knight, Queen"
+      end  
+  end
 end

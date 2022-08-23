@@ -31,4 +31,9 @@ module Pieces
     eight_pawns  
   end
 
+  def make_new_piece(current_player, selection)
+    klass = Object.const_get selection
+    klass.new(current_player.team, num=0)
+   end 
+
 end
