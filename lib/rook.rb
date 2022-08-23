@@ -51,6 +51,12 @@ class Rook
     moves.map {|move| keep_legal_moves(move)}            
   end
 
+  def find_castling_path(finish, start=@current)
+    moves = possible_moves()
+    path = find_path(moves, finish)
+    path.flatten!
+  end
+
   def get_move_options
     [[[0,-1], [0,-2], [0,-3], [0,-4], [0,-5], [0,-6], [0,-7]],
     [[0, 1], [0, 2], [0,3], [0,4], [0,5], [0,6], [0,7]],

@@ -9,16 +9,16 @@ module Move
   end
 
   def find_rook_path(finish)
-    your_rooks.map do |rook|
+    routes = your_rooks.map do |rook|
               moves = rook.possible_moves
               path = find_path(moves, finish)
-    end  
+    end 
   end 
 
-  def closest_rook(finish)
+  def closest_rook(finish, board=@board)
     routes = find_rook_path(finish)
-    return false if routes.nil?
-    
+    return if routes.nil?
+
     if routes[0].length < routes[1].length
       return your_rooks.first
     else
@@ -26,8 +26,15 @@ module Move
     end    
   end
 
+  def rook_requirements?(finish)
+    rook = closest_rook(finish)
+    return false if rook.nil?
+
+    rook.current == rook.starting
+  end
+
   def castling(king, finish, board=@board, pieces=@pieces)
-    if castling_requirements_met?(king, finish) && castling_path_clear?(king, finish)
+    if castling_requirements_met?(king, finish) && all_paths_clear?(king, rook=closest_rook(finish), finish)
       king_start = king.current
       rook_start = closest_rook(finish).current
       
@@ -42,12 +49,15 @@ module Move
   def castling_requirements_met?(king, finish)
     return king.class == King && 
       king.current == king.starting &&
-      closest_rook(finish).current == closest_rook(finish).starting &&
+      rook_requirements?(finish) &&
       [[0,2], [0,6], [7,2], [7,6]].include?(finish)
   end 
 
-  def castling_path_clear?(king, finish, board=@board)
-    p path = king.find_castling_path(finish)
+  def all_paths_clear?(king, rook, finish, board=@board)
+    path = king.find_castling_path(finish)
+    path << rook.find_castling_path(finish) unless rook.find_castling_path(finish).nil?
+    path
+    path.all? {|space| p board.square_free?(space)}
     return path.all? {|space| board.square_free?(space)}
   end 
 
