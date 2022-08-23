@@ -5,19 +5,19 @@ module Move
   end
 
   def your_rooks
-    rooks = pieces.select {|piece| piece.team == current_player.team && piece.class == Rook}
+    pieces.select {|piece| piece.team == current_player.team && piece.class == Rook}
   end
 
   def find_rook_path(finish)
     routes = your_rooks.map do |rook|
-              moves = rook.possible_moves
+              moves = rook.possible_moves()
               path = find_path(moves, finish)
-    end 
+    end
   end 
 
   def closest_rook(finish, board=@board)
     routes = find_rook_path(finish)
-    return if routes.nil?
+    return routes if routes.nil?
 
     if routes[0].length < routes[1].length
       return your_rooks.first
@@ -49,15 +49,15 @@ module Move
   def castling_requirements_met?(king, finish)
     return king.class == King && 
       king.current == king.starting &&
-      rook_requirements?(finish) &&
       [[0,2], [0,6], [7,2], [7,6]].include?(finish)
+      rook_requirements?(finish)
   end 
 
   def all_paths_clear?(king, rook, finish, board=@board)
     path = king.find_castling_path(finish)
     path << rook.find_castling_path(finish) unless rook.find_castling_path(finish).nil?
     path
-    path.all? {|space| p board.square_free?(space)}
+    path.all? {|space| board.square_free?(space)}
     return path.all? {|space| board.square_free?(space)}
   end 
 

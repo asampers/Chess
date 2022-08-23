@@ -1,18 +1,15 @@
 module Check
   
-  def out_of_check(finish)
-    if king_in_check?()
-      return test_all_possible_moves().include?(finish)
-    end  
-    true
+  def out_of_check(selected_piece, finish)
+    possible_moves_out_of_check(selected_piece).include?(finish)
   end
-  
+
   def king_in_check?
     can_reach_king?().any?
   end
 
-  def checkmate_stalemate(opponent)
-    return if test_all_possible_moves().any?
+  def checkmate_stalemate(opponent, options)
+    return if options.any?
 
     if king_in_check?()
       puts "Game Over: Checkmate"
