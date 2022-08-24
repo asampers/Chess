@@ -1,3 +1,5 @@
+require 'yaml'
+
 class King
   include Move
   include Check

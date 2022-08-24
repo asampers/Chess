@@ -1,3 +1,5 @@
+require 'yaml'
+
 class Bishop
   include Move 
   include Check

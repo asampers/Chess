@@ -1,3 +1,5 @@
+require 'yaml'
+
 class Rook
   include Move
   include Check

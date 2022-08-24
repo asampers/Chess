@@ -37,11 +37,15 @@ class Game
   attr_reader :players, :pieces
 
   def initialize
-    @board = Board.new
-    @current_player_id = 0
-    @players = [Player.new('white'), Player.new('black')]
-    @pieces = create_pieces('white') + create_pieces('black')
-    @board.place_pieces(@pieces) 
+    if play_from_saved_game()
+      return 
+    else  
+      @board = Board.new
+      @current_player_id = 0
+      @players = [Player.new('white'), Player.new('black')]
+      @pieces = create_pieces('white') + create_pieces('black')
+      @board.place_pieces(@pieces) 
+    end
   end
 
   def play
@@ -114,12 +118,15 @@ class Game
   def pawn_promotion()
     pawns = @pieces.select {|pawn| pawn.class == Pawn}
     piece_to_promote = pawns.select {|pawn| [0,7].include?(pawn.current[0])}.pop
+  
     if piece_to_promote
       selection = current_player.pick_piece
       new_piece = make_new_piece(current_player, selection)
       new_piece.current = piece_to_promote.current
+      @board.clear_space(new_piece.current)
       @pieces.delete(piece_to_promote)
       @pieces << new_piece
+      @pieces 
       @board.place_pieces(@pieces)
       puts "#{current_player} got a new #{selection}." 
     end  

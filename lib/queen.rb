@@ -1,3 +1,5 @@
+require 'yaml'
+
 class Queen
   include Move
   include Check

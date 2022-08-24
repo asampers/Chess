@@ -1,3 +1,5 @@
+require 'yaml'
+
 class Pawn
   include Move 
   include Check
@@ -50,8 +52,6 @@ class Pawn
       return moves.flatten(1).include?(finish)  
     end
     
-    p moves.flatten(1)
-    p path
     return moves.flatten(1).include?(finish) && path.all? {|space| board.square_free?(space)}
   end 
 

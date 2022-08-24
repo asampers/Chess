@@ -1,7 +1,9 @@
+require 'yaml'
+
 class Knight 
   include Move
   include Check
-  
+
   attr_accessor :current 
   attr_reader :starting, :team, :symbol
 
