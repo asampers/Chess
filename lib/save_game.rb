@@ -38,8 +38,6 @@ module SaveGame
     @current_player_id = f.current_player_id
     @players = f.players
     @pieces = f.pieces
-    #@board.place_pieces
-
     File.delete("saved_games/#{filename}.yml")
   end
 

@@ -23,7 +23,6 @@ module Display
     selection
   end
 
-
 end
 
 class Game

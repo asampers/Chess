@@ -1,3 +1,5 @@
+require 'yaml'
+
 class Board 
 
   attr_accessor :spaces
@@ -34,10 +36,6 @@ class Board
       end 
     end    
   end
-
-  def square_occupied?(space)
-    return @spaces.index(space)
-  end 
 
   def square_free?(space)
     return false if @spaces.index(space).nil?
