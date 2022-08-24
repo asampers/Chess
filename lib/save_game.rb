@@ -18,7 +18,8 @@ module SaveGame
     filename = "saved_games/#{answer}.yml"
 
     File.open(filename, 'w') {|file| file.puts YAML.dump(game)}
-    puts "Game saved. Thanks for playing"
+    p "Game saved. Thanks for playing"
+    return 'stop'
   end
 
   def choose_saved_game
@@ -31,13 +32,14 @@ module SaveGame
   def load_game(filename)
     file = File.open("saved_games/#{filename}.yml", "r")
     data = file.read
-    f = YAML::safe_load(data, permitted_classes: [Game, Player, Bishop, Board, King, Knight, Pawn, Queen, Rook])
+    f = YAML::safe_load(data, permitted_classes: [Game, Player, Bishop, Board, King, Knight, Pawn, Queen, Rook], aliases: true)
     puts "Welcome back, #{f.players[0]} and #{f.players[1]}."
     @board = f.board
     @current_player_id = f.current_player_id
     @players = f.players
     @pieces = f.pieces
-  
+    #@board.place_pieces
+
     File.delete("saved_games/#{filename}.yml")
   end
 
