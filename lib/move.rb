@@ -33,6 +33,16 @@ module Move
     rook.current == rook.starting
   end
 
+  def castling_path_unsafe?(path)
+    opponents = []
+    opponent_pieces.each do |piece|
+      path.each do |spot|
+        opponents << piece if attempt_movement(piece, spot)
+      end
+    end  
+    opponents.any?          
+  end 
+
   def castling(king, finish, board=@board, pieces=@pieces)
     if castling_requirements_met?(king, finish) && all_paths_clear?(king, rook=closest_rook(finish), finish)
       king_start = king.current
@@ -55,6 +65,7 @@ module Move
 
   def all_paths_clear?(king, rook, finish, board=@board)
     path = king.find_castling_path(finish)
+    return false if castling_path_unsafe?(path)
     path << rook.find_castling_path(finish) unless rook.find_castling_path(finish).nil?
     path
     path.all? {|space| board.square_free?(space)}
@@ -84,9 +95,7 @@ module Move
   end
 
   def can_move?(path, moves, finish, board)
-    return true if moves.include?(finish)
-    
-    false
+    moves.include?(finish)
   end
 
   def find_path(moves, finish)
