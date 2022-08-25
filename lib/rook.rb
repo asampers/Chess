@@ -27,9 +27,7 @@ class Rook
   end
 
   def can_move?(path, moves, finish, board)
-    return true if path.all? {|space| board.square_free?(space)}
-
-    false
+    path.all? {|space| board.square_free?(space)}
   end 
 
   def castle_move

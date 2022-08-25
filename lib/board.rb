@@ -44,9 +44,7 @@ class Board
   end
 
   def legal_move?(move)
-    return true if @spaces.include?(move)
-
-    false
+    @spaces.include?(move)
   end
 
   def display
